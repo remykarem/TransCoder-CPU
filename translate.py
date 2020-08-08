@@ -92,14 +92,14 @@ class Translator:
         assert len(reloaded['decoder'].keys()) == len(
             list(p for p, _ in self.decoder.state_dict().items()))
 
-        self.encoder.cuda()
-        self.decoder.cuda()
+        self.encoder.cpu()
+        self.decoder.cpu()
 
         self.encoder.eval()
         self.decoder.eval()
         self.bpe_model = fastBPE.fastBPE(os.path.abspath(params.BPE_path))
 
-    def translate(self, input, lang1, lang2, n=1, beam_size=1, sample_temperature=None, device='cuda:0'):
+    def translate(self, input, lang1, lang2, n=1, beam_size=1, sample_temperature=None, device='cpu:0'):
         with torch.no_grad():
             assert lang1 in {'python', 'java', 'cpp'}, lang1
             assert lang2 in {'python', 'java', 'cpp'}, lang2
