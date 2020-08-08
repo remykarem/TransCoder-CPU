@@ -1,3 +1,4 @@
 *.pyc
 *.log
 DS.Store
+*.pth
