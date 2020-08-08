@@ -1,0 +1,5 @@
+sacrebleu==1.2.11
+clang
+torch==1.6.0
+numpy
+six
