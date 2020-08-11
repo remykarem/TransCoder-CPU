@@ -159,25 +159,40 @@ if __name__ == '__main__':
     parser = get_parser()
     params = parser.parse_args()
 
+    print(params.BPE_path)
+
     # check parameters
     assert os.path.isfile(
-        params.model_path), f"The path to the model checkpoint is incorrect: {params.model_path}"
-    assert os.path.isfile(
         params.BPE_path), f"The path to the BPE tokens is incorrect: {params.BPE_path}"
-    assert params.src_lang in SUPPORTED_LANGUAGES, f"The source language should be in {SUPPORTED_LANGUAGES}."
-    assert params.tgt_lang in SUPPORTED_LANGUAGES, f"The target language should be in {SUPPORTED_LANGUAGES}."
+    # assert params.tgt_lang in SUPPORTED_LANGUAGES, f"The target language should be in {SUPPORTED_LANGUAGES}."
 
     # Initialize translator
+    print("Loading transcoder...")
     translator = Translator(params)
+    print("Loaded!")
 
-    # read input code from stdin
-    src_sent = []
-    input = sys.stdin.read().strip()
-
-    with torch.no_grad():
-        output = translator.translate(
-            input, lang1=params.src_lang, lang2=params.tgt_lang, beam_size=params.beam_size)
-
-    for out in output:
+    while True:
+        # read input code from stdin
         print("=" * 20)
-        print(out)
+        print("Python")
+        print("=" * 20)
+        src_sent = []
+        input = sys.stdin.read().strip()
+
+        with torch.no_grad():
+            java = translator.translate(
+                input, lang1="python", lang2="java", beam_size=params.beam_size)
+            cpp = translator.translate(
+                input, lang1="python", lang2="cpp", beam_size=params.beam_size)
+
+        for out in java:
+            print("=" * 20)
+            print("Java")
+            print("=" * 20)
+            print(out)
+
+        for out in cpp:
+            print("=" * 20)
+            print("C++")
+            print("=" * 20)
+            print(out)
